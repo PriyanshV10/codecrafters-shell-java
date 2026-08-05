@@ -1,3 +1,6 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -5,11 +8,11 @@ import java.util.Set;
 
 public class Main {
 
-  static Set<String> commands;
+  static Set<String> shellCommands;
 
   public static void main(String[] args) throws Exception {
-    commands = new HashSet<>();
-    commands.addAll(Arrays.asList("echo", "exit", "type"));
+    shellCommands = new HashSet<>();
+    shellCommands.addAll(Arrays.asList("echo", "exit", "type"));
 
     Scanner scanner = new Scanner(System.in);
     while (true) {
@@ -25,18 +28,36 @@ public class Main {
       } else if (command.equals("echo")) {
         System.out.println(remaining);
       } else if (command.equals("type")) {
-        if (isValidCommand(remaining)) {
+        if (isShellCommand(remaining)) {
           System.out.println(remaining + " is a shell builtin");
         } else {
-          System.out.println(remaining + ": not found");
+          String commandPath = findExecutable(remaining);
+          if (commandPath.isEmpty()) {
+            System.out.println(remaining + ": not found");
+          } else {
+            System.out.println(remaining + " is " + commandPath);
+          }
         }
-      } else if (!isValidCommand(input)) {
+      } else if (!isShellCommand(input)) {
         System.out.println(input + ": command not found");
       }
     }
   }
 
-  private static boolean isValidCommand(String command) {
-    return commands.contains(command);
+  private static boolean isShellCommand(String command) {
+    return shellCommands.contains(command);
+  }
+
+  private static String findExecutable(String command) {
+    String[] dirs = System.getenv("PATH").split(":");
+
+    for (String dir : dirs) {
+      Path candidate = Paths.get(dir, command);
+      if (Files.isExecutable(candidate)) {
+        return candidate.toString();
+      }
+    }
+
+    return "";
   }
 }
