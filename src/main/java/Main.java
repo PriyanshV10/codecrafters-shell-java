@@ -16,16 +16,19 @@ public class Main {
       System.out.print("$ ");
       String input = scanner.nextLine();
 
-      if (input.equals("exit")) {
+      int firstSpace = input.indexOf(" ");
+      String command = firstSpace == -1 ? input : input.substring(0, firstSpace);
+      String remaining = firstSpace == -1 ? "" : input.substring(firstSpace + 1);
+
+      if (command.equals("exit")) {
         break;
-      } else if (input.startsWith("echo ")) {
-        System.out.println(input.substring(input.indexOf(' ') + 1));
-      } else if (input.startsWith("type ")) {
-        String command = input.substring(input.indexOf(' ') + 1);
-        if (isValidCommand(command)) {
-          System.out.println(command + " is a shell builtin");
+      } else if (command.equals("echo")) {
+        System.out.println(remaining);
+      } else if (command.equals("type")) {
+        if (isValidCommand(remaining)) {
+          System.out.println(remaining + " is a shell builtin");
         } else {
-          System.out.println(command + ": not found");
+          System.out.println(remaining + ": not found");
         }
       } else if (!isValidCommand(input)) {
         System.out.println(input + ": command not found");
