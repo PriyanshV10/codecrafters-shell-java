@@ -88,7 +88,7 @@ public class Main {
     Path current = Path.of(System.getProperty("user.dir"));
     Path target =
         newPath.equals("~")
-            ? Path.of(System.getProperty("user.home"))
+            ? Path.of(System.getenv("HOME"))
             : current.resolve(newPath).normalize();
 
     if (Files.isDirectory(target)) {
