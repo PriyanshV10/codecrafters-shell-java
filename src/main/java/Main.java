@@ -1,3 +1,4 @@
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,7 +10,7 @@ public class Main {
 
   public static void main(String[] args) throws Exception {
     shellCommands = new HashSet<>();
-    shellCommands.addAll(Arrays.asList("echo", "exit", "type", "pwd"));
+    shellCommands.addAll(Arrays.asList("echo", "exit", "type", "pwd", "cd"));
 
     Scanner scanner = new Scanner(System.in);
     while (true) {
@@ -44,6 +45,7 @@ public class Main {
       case "echo" -> System.out.println(remaining);
       case "type" -> System.out.println(typeCommand(remaining));
       case "pwd" -> System.out.println(System.getProperty("user.dir"));
+      case "cd" -> changeDirectory(remaining);
       default -> {}
     }
   }
@@ -79,6 +81,13 @@ public class Main {
       process.waitFor();
     } catch (Exception e) {
       System.out.println(e);
+    }
+  }
+
+  private static void changeDirectory(String newPath) {
+    File file = new File(newPath);
+    if(file.exists()) {
+      System.setProperty("user.dir", file.getAbsolutePath());
     }
   }
 }
