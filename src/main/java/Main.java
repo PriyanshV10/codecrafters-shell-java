@@ -9,7 +9,7 @@ public class Main {
 
   public static void main(String[] args) throws Exception {
     shellCommands = new HashSet<>();
-    shellCommands.addAll(Arrays.asList("echo", "exit", "type"));
+    shellCommands.addAll(Arrays.asList("echo", "exit", "type", "pwd"));
 
     Scanner scanner = new Scanner(System.in);
     while (true) {
@@ -22,10 +22,8 @@ public class Main {
 
       if (command.equals("exit")) {
         break;
-      } else if (command.equals("echo")) {
-        System.out.println(remaining);
-      } else if (command.equals("type")) {
-        System.out.println(typeCommand(remaining));
+      } else if (isShellCommand(command)) {
+        executeShellCommand(command, remaining, input);
       } else {
         Optional<Path> executable = findExecutable(command);
         if (executable.isPresent()) {
@@ -39,6 +37,15 @@ public class Main {
 
   private static boolean isShellCommand(String command) {
     return shellCommands.contains(command);
+  }
+
+  private static void executeShellCommand(String command, String remaining, String input) {
+    switch (command) {
+      case "echo" -> System.out.println(remaining);
+      case "type" -> System.out.println(typeCommand(remaining));
+      case "pwd" -> System.out.println(System.getProperty("user.dir"));
+      default -> {}
+    }
   }
 
   private static Optional<Path> findExecutable(String command) {
