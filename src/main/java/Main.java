@@ -89,5 +89,8 @@ public class Main {
     if(file.exists()) {
       System.setProperty("user.dir", file.getAbsolutePath());
     }
+    else {
+      System.out.println("cd: " + file + ": No such file or directory");
+    }
   }
 }
