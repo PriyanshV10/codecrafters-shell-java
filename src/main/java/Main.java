@@ -85,19 +85,11 @@ public class Main {
   }
 
   private static void changeDirectory(String newPath) {
-    File file;
     Path current = Path.of(System.getProperty("user.dir"));
+    Path next = current.resolve(newPath).normalize();
+    File file = next.toFile();
 
-    if (newPath.startsWith("./")) {
-      file = new File(current + newPath.substring(newPath.indexOf('/')));
-    } else if (newPath.startsWith("../")) {
-      Path parent = current.getParent();
-      file = new File(parent + newPath.substring(newPath.indexOf('/')));
-    } else {
-      file = new File(newPath);
-    }
-
-    if (file.exists()) {
+    if (file.isDirectory()) {
       System.setProperty("user.dir", file.getAbsolutePath());
     } else {
       System.out.println("cd: " + file + ": No such file or directory");
