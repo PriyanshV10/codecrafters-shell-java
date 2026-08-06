@@ -28,10 +28,9 @@ public class Main {
         System.out.println(typeCommand(remaining));
       } else {
         Optional<Path> executable = findExecutable(command);
-        if(executable.isPresent()) {
+        if (executable.isPresent()) {
           runCommand(executable.get(), input);
-        }
-        else {
+        } else {
           System.out.println(command + ": command not found");
         }
       }
@@ -65,7 +64,7 @@ public class Main {
 
   private static void runCommand(Path executable, String input) {
     String[] parts = input.split(" ");
-//    parts[0] = executable.toString();
+    //    parts[0] = executable.toString();
     ProcessBuilder processBuilder = new ProcessBuilder(parts);
     processBuilder.inheritIO();
 
