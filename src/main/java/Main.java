@@ -65,7 +65,7 @@ public class Main {
 
   private static void runCommand(Path executable, String input) {
     String[] parts = input.split(" ");
-    parts[0] = executable.toString();
+//    parts[0] = executable.toString();
     ProcessBuilder processBuilder = new ProcessBuilder(parts);
     processBuilder.inheritIO();
 
