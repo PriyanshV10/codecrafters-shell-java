@@ -86,13 +86,15 @@ public class Main {
 
   private static void changeDirectory(String newPath) {
     Path current = Path.of(System.getProperty("user.dir"));
-    Path next = current.resolve(newPath).normalize();
-    File file = next.toFile();
+    Path target =
+        newPath.equals("~")
+            ? Path.of(System.getProperty("user.home"))
+            : current.resolve(newPath).normalize();
 
-    if (file.isDirectory()) {
-      System.setProperty("user.dir", file.getAbsolutePath());
+    if (Files.isDirectory(target)) {
+      System.setProperty("user.dir", target.toString());
     } else {
-      System.out.println("cd: " + file + ": No such file or directory");
+      System.out.println("cd: " + newPath + ": No such file or directory");
     }
   }
 }
